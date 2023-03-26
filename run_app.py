@@ -1,5 +1,5 @@
 import re
-from app import solve_linear_equation, linear_equation_func
+from equation_solver import solve_linear_equation, linear_equation_func
 
 
 if __name__ == '__main__':
@@ -33,7 +33,7 @@ if __name__ == '__main__':
                 break
             else:
                 raise Exception
-        except Exception as e:
+        except:
             print("Invalid equation format. Please enter either 'ax - b = c' or 'a(bx + c) + d = e - fx'. \n")
             break
 

@@ -81,57 +81,65 @@ def linear_equation_func(equation):
         The equation should be entered in the format "a(bx + c) + d = e - fx", where a, b, c, d, e and f are integers or decimals.
     """
     # Get linear equation from user
-    while True:
-        try:
-            # Parse equation into components
-            equation_parts = equation.split(" ")
+    try:
+        # Parse equation into components
+        equation_parts = equation.split(" ")
 
-            a = float(equation_parts[0].split("(")[0])
-            b = float(equation_parts[0].split("(")[1].split("x")[0])
-            c = float(equation_parts[2].split(")")[0])
-            d = float(equation_parts[4])
-            e = float(equation_parts[6])
-            f = float(equation_parts[8].split("x")[0])
+        a = float(equation_parts[0].split("(")[0])
+        b = float(equation_parts[0].split("(")[1].split("x")[0])
+        c = float(equation_parts[2].split(")")[0])
+        d = float(equation_parts[4])
+        e = float(equation_parts[6])
+        f = float(equation_parts[8].split("x")[0])
 
-            c_sign, d_sign, f_sign = equation_parts[1], equation_parts[3], equation_parts[7]
+        c_sign, d_sign, f_sign = equation_parts[1], equation_parts[3], equation_parts[7]
 
-            # Expand the bracket
-            equation1 = f"({b}x * {a}) {c_sign} ({c} * {a}) {d_sign} {d} = {e} {f_sign} {f}x\n"
-            print("First, expand the bracket...")
-            print(equation1)
+        steps = []
 
-            c_a = c*a
-            equation_2 = f"{b*a}x {c_sign} {c_a} {d_sign} {d} = {e} {f_sign} {f}x\n"
-            equation_2i = f"{b*a}x {c_sign} {c_a+d} = {e} {f_sign} {f}x" if d_sign == "+" else f"{b*a}x {c_sign} {c_a-d} = {e} {f_sign} {f}x"
-            print("Simplify the equation...")
-            print(equation_2)
+        # Expand the bracket
+        equation1 = f"({b}x * {a}) {c_sign} ({c} * {a}) {d_sign} {d} = {e} {f_sign} {f}x\n"
+        steps.append("First, expand the bracket...")
+        steps.append(equation1)
 
-            print("Further simplify the equation...")
-            print(equation_2i + "\n")
+        c_a = c*a
+        equation_2 = f"{b*a}x {c_sign} {c_a} {d_sign} {d} = {e} {f_sign} {f}x\n"
+        equation_2i = f"{b*a}x {c_sign} {c_a+d} = {e} {f_sign} {f}x" if d_sign == "+" else f"{b*a}x {c_sign} {c_a-d} = {e} {f_sign} {f}x"
+        steps.append("Simplify the equation...")
+        steps.append(equation_2)
 
-            # Solve and remove the bracket
-            eval1 = b * a
-            eval2 = eval(f"{a}*{c_sign}{c}")
-            eval3 = eval(f"{eval2} {d_sign} {d}")
+        steps.append("Further simplify the equation...")
+        steps.append(equation_2i + "\n")
 
-            eval4 = eval(f"{eval1} - {f}") if f_sign == "+" else eval(f"{eval1} + {f}")
-            eval5 = eval(f"{e} - {eval3}") if f_sign == "+" else eval(f"{e} - {eval3}")
+        # Solve and remove the bracket
+        eval1 = b * a
+        eval2 = eval(f"{a}*{c_sign}{c}")
+        eval3 = eval(f"{eval2} {d_sign} {d}")
 
-            print("Move like terms to same side...")
-            equation_4 = f"{eval1}x {'-' if f_sign == '+' else '+'} {f}x = {e} {'+' if f_sign == '+' else '-'} {eval3}\n"
-            print(equation_4)
+        eval4 = eval(f"{eval1} - {f}") if f_sign == "+" else eval(f"{eval1} + {f}")
+        eval5 = eval(f"{e} - {eval3}") if f_sign == "+" else eval(f"{e} - {eval3}")
 
-            print("Further simplify the equation...")
-            equation_5 = f"{eval4}x = {eval5}\n"
-            print(equation_5)
+        steps.append("Move like terms to same side...")
+        equation_4 = f"{eval1}x {'-' if f_sign == '+' else '+'} {f}x = {e} {'+' if f_sign == '+' else '-'} {eval3}\n"
+        steps.append(equation_4)
 
-            print(f"Divide both side by {eval4}")
-            equation_6 = f"{eval4}x / {eval4} = {eval5} / {eval4}\n"
-            print(equation_6)
+        steps.append("Further simplify the equation...")
+        equation_5 = f"{eval4}x = {eval5}\n"
+        steps.append(equation_5)
 
-            print("Finally, the answer is...")
-            equation_7 = f"x = " + str(eval5/eval4)
-            print(equation_7)
-            break
-        except Exception as e:
-            print("Invalid equation format. Please enter the equation in the format 'a(bx + c) + d = e - fx', where a, b, c, d, e, and f are integers or decimals. \n")
+        steps.append(f"Divide both side by {eval4}")
+        equation_6 = f"{eval4}x / {eval4} = {eval5} / {eval4}\n"
+        steps.append(equation_6)
+
+        steps.append("Finally, the answer is...")
+        equation_7 = f"x = " + str(eval5/eval4)
+        steps.append(equation_7)
+        
+
+        # Print the steps
+        for step in steps:
+            print(step)
+        
+        return equation_7
+    
+    except Exception as e:
+        print("Invalid equation format. Please enter the equation in the format 'a(bx + c) + d = e - fx', where a, b, c, d, e, and f are integers or decimals. \n")
